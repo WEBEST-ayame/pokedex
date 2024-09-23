@@ -15,7 +15,7 @@ export type PokemonDetails = {
   genus: string;
   ability: string;
   imageUrl: string;
-  types: PokemonType[];
+  types: string;
   abilityDescription: string;
   count: number;
 };
