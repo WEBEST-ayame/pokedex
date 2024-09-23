@@ -15,9 +15,17 @@ export type PokemonDetails = {
   genus: string;
   ability: string;
   imageUrl: string;
-  types: string | string[];
+  types: PokemonType[];
   abilityDescription: string;
   count: number;
+};
+
+export type PokemonType = {
+  slot: number;
+  type: {
+    name: string;
+    url: string;
+  };
 };
 
 export type Language = {
