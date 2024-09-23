@@ -1,0 +1,81 @@
+.wrapper {
+  position: relative;
+}
+.mainContent {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 20px;
+}
+
+.imageWrap {
+  min-height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.imageWrap img {
+  width: 100%;
+  height: auto;
+}
+
+.imageLoading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.textContent {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f9eedb;
+}
+
+.number {
+  font-size: 2rem;
+  font-weight: 600;
+}
+.textContent h2 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin: 10px 0;
+}
+.textContent p {
+  font-size: 1.6rem;
+  margin: 10px 0;
+}
+
+.pageTransitionButton {
+  position: absolute;
+  top: 50%;
+}
+.prevButton {
+  left: 0;
+  transform: translate(-50%, -50%);
+}
+.nextButton {
+  right: 0;
+  transform: translate(50%, -50%);
+}
+.pageTransitionButton svg {
+  font-size: 4rem;
+}
+
+@media screen and (max-width: 768px) {
+  .mainContent {
+    display: block;
+    margin-bottom: 190px;
+  }
+  .textContent {
+    margin-top: 0;
+  }
+  .imageWrap {
+    width: 80%;
+    margin: auto;
+    min-height: none;
+    aspect-ratio: 1;
+  }
+}

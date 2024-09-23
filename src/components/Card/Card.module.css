@@ -1,0 +1,47 @@
+.listWrap {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+}
+.listWrap li {
+  width: 19%;
+  aspect-ratio: 1;
+  margin: 0.5%;
+  border-radius: 10px;
+  box-shadow: 3px 3px 5px 0px rgba(0, 0, 0, 0.4), inset 3px 3px 12px transparent;
+  transition: box-shadow 0.3s ease-in-out;
+  overflow: hidden;
+}
+.listWrap a {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.listWrap img {
+  display: block;
+  height: calc(100% - 25px);
+  width: auto;
+  margin: auto;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+.listWrap li:hover {
+  box-shadow: 3px 3px 5px 0px transparent, inset 3px 3px 12px rgba(0, 0, 0, 0.4);
+}
+.pokeName {
+  font-size: 1.6rem;
+  color: #333;
+  text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+  .listWrap li {
+    width: 49%;
+  }
+  .listWrap {
+    margin-bottom: 68px;
+  }
+}

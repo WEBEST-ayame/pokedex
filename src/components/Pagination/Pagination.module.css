@@ -1,0 +1,42 @@
+.pagination {
+  position: fixed;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  background-color: #333;
+  padding: 10px;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.6rem;
+}
+.paginationButton {
+  border: none;
+  outline: none;
+  background: #fff;
+  color: #333;
+  padding: 2px 5px;
+  border-radius: 3px;
+  margin: 0 5px;
+}
+.paginationButton:disabled {
+  opacity: 0.5;
+}
+.pageNum {
+  margin: 0 10px;
+}
+.paginationSkipButton {
+  border: none;
+  outline: none;
+  color: #fff;
+  background: transparent;
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (max-width: 768px) {
+  .pagination {
+    width: 280px;
+  }
+}

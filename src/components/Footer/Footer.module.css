@@ -1,0 +1,22 @@
+.footerButton {
+  width: 80px;
+  height: 80px;
+  padding: 0;
+  border: none;
+  outline: none;
+  background-color: #333;
+  color: #fff;
+  position: fixed;
+  right: 15px;
+  bottom: 15px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (max-width: 768px) {
+  .footerButton {
+    bottom: 70px;
+  }
+}
