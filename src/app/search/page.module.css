@@ -10,10 +10,12 @@
 }
 
 .searchButton {
-  padding: 10px;
+  padding: 10px 0;
   font-size: 1.6rem;
   background: #ddd;
   border: 1px solid #ddd;
+  width: 54px;
+  text-align: center;
 }
 
 .note {

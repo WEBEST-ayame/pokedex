@@ -2,6 +2,7 @@
   display: flex;
   flex-wrap: wrap;
   list-style: none;
+  margin-bottom: 68px;
 }
 .listWrap li {
   width: 19%;
@@ -40,8 +41,5 @@
 @media screen and (max-width: 768px) {
   .listWrap li {
     width: 49%;
-  }
-  .listWrap {
-    margin-bottom: 68px;
   }
 }

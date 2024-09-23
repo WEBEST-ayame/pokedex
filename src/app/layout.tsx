@@ -5,8 +5,8 @@ import Footer from "@/components/Footer/Footer";
 import { M_PLUS_Rounded_1c } from "next/font/google";
 
 export const metadata = {
-  title: "My Pokedex",
-  description: "Discover and explore Pokémon",
+  title: "ポケモン図鑑",
+  description: "pokeAPIをつかったポケモン図鑑",
 };
 
 const fntMPLUSRounded = M_PLUS_Rounded_1c({
