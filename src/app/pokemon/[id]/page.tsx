@@ -1,9 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import {
-  findMaxPokemonId,
-  getPokemonDetailsInJapanese,
-} from "../../lib/pokeapi";
+import { findMaxPokemonId, findNextPokemonId, findPreviousPokemonId, getPokemonDetailsInJapanese } from "../../lib/pokeapi";
 import style from "./page.module.css";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,6 +13,8 @@ import { PokemonDetails } from "@/app/lib/types";
 export default function PokemonDetail({ params }: { params: { id: string } }) {
   const [pokemon, setPokemon] = useState<PokemonDetails | null>(null);
   const [maxPokemonId, setMaxPokemonId] = useState<number | null>(null);
+  const [nextPokemonId, setNextPokemonId] = useState<number | null>(null);
+  const [prevPokemonId, setPrevPokemonId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true); // データのローディング状態を管理
   const [imageLoaded, setImageLoaded] = useState(false); // 画像のロード状態を管理
 
@@ -24,12 +23,15 @@ export default function PokemonDetail({ params }: { params: { id: string } }) {
     async function fetchPokemonDetails() {
       setLoading(true); // データ取得前にローディング開始
       try {
-        const pokemonData = await getPokemonDetailsInJapanese(
-          Number(params.id)
-        );
+        const pokemonData = await getPokemonDetailsInJapanese(Number(params.id));
         const maxId = await findMaxPokemonId();
+        const nextId = await findNextPokemonId(Number(params.id));
+        const prevId = await findPreviousPokemonId(Number(params.id));
+
         setPokemon(pokemonData);
         setMaxPokemonId(maxId);
+        setNextPokemonId(nextId);
+        setPrevPokemonId(prevId);
       } catch (error) {
         console.error(error);
       } finally {
@@ -76,9 +78,7 @@ export default function PokemonDetail({ params }: { params: { id: string } }) {
             />
           </div>
           <div className={style.textContent}>
-            <div className={style.number}>
-              NO.{("0000" + pokemon.id).slice(-5)}
-            </div>
+            <div className={style.number}>NO.{("0000" + pokemon.id).slice(-5)}</div>
             <h2>{pokemon.name}</h2>
             <p>分類：{pokemon.genus}</p>
             <p>タイプ：{pokemon.types}</p>
@@ -91,18 +91,12 @@ export default function PokemonDetail({ params }: { params: { id: string } }) {
             </p>
           </div>
           {pokemon.id !== 1 && (
-            <Link
-              href={`/pokemon/${Number(pokemon.id) - 1}`}
-              className={`${style.pageTransitionButton} ${style.prevButton}`}
-            >
+            <Link href={`/pokemon/${prevPokemonId}`} className={`${style.pageTransitionButton} ${style.prevButton}`}>
               <ArrowBackIcon />
             </Link>
           )}
           {Number(pokemon.id) !== maxPokemonId && (
-            <Link
-              href={`/pokemon/${Number(pokemon.id) + 1}`}
-              className={`${style.pageTransitionButton} ${style.nextButton}`}
-            >
+            <Link href={`/pokemon/${nextPokemonId}`} className={`${style.pageTransitionButton} ${style.nextButton}`}>
               <ArrowForwardIcon />
             </Link>
           )}
