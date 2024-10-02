@@ -28,7 +28,6 @@ export default function PokemonSearch() {
     async function fetchPokemon() {
       setLoading(true);
       const result = await searchPokemonByJapaneseName(searchQuery);
-      console.log(result);
       setAllPokemon(result.pokemon); // 全件を保存
       setTotalPages(Math.ceil(result.pokemon.length / limit));
       setLoading(false);
@@ -38,10 +37,7 @@ export default function PokemonSearch() {
   }, [searchQuery]);
 
   // ページのデータをスライスして表示
-  const paginatedPokemon = allPokemon.slice(
-    (currentPage - 1) * limit,
-    currentPage * limit
-  );
+  const paginatedPokemon = allPokemon.slice((currentPage - 1) * limit, currentPage * limit);
 
   const handleSearch = () => {
     setSearchQuery(query); // 入力されたクエリで検索を実行
@@ -80,11 +76,7 @@ export default function PokemonSearch() {
           placeholder="ポケモンを検索"
           className={style.input}
         />
-        <button
-          onClick={handleSearch}
-          type="button"
-          className={style.searchButton}
-        >
+        <button onClick={handleSearch} type="button" className={style.searchButton}>
           検索
         </button>
       </div>
