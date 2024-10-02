@@ -20,7 +20,6 @@ export default function Card({ data, isSearch }: CardProp) {
               width={100}
               height={100}
               onError={(e) => {
-                console.error(`Image failed to load for ${poke.name}, using fallback`);
                 e.currentTarget.src = "/image/no_image.jpg";
               }}
             />
