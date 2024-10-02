@@ -18,16 +18,16 @@ const getPokemonDetails = async (pokemonUrl: string) => {
 
 // 画像と総数は全ページで使うため、関数化してidで取得
 const getImageUrl = (sprites: Sprites): string => {
-  if (sprites?.other?.["official-artwork"]?.front_default) {
+  if (sprites.other?.["official-artwork"]?.front_default) {
     return sprites.other["official-artwork"].front_default;
   }
-  if (sprites?.other?.home?.front_default) {
+  if (sprites.other?.home?.front_default) {
     return sprites.other.home.front_default;
   }
-  if (sprites?.front_default) {
+  if (sprites.front_default) {
     return sprites.front_default;
   }
-  return "/image/no_image.jpg"; // no_imageが正しく参照できるようにする
+  return "/image/no_image.jpg";
 };
 
 // ポケモンの総数を取得する関数
