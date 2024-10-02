@@ -18,16 +18,16 @@ const getPokemonDetails = async (pokemonUrl: string) => {
 
 // 画像と総数は全ページで使うため、関数化してidで取得
 const getImageUrl = (sprites: Sprites): string => {
-  if (sprites.other?.["official-artwork"]?.front_default) {
+  if (sprites?.other?.["official-artwork"]?.front_default) {
     return sprites.other["official-artwork"].front_default;
   }
-  if (sprites.other?.home?.front_default) {
+  if (sprites?.other?.home?.front_default) {
     return sprites.other.home.front_default;
   }
-  if (sprites.front_default) {
+  if (sprites?.front_default) {
     return sprites.front_default;
   }
-  return "/image/no_image.jpg";
+  return "/image/no_image.jpg"; // no_imageが正しく参照できるようにする
 };
 
 // ポケモンの総数を取得する関数
@@ -42,7 +42,9 @@ const getPokemonWithImageUrl = async (pokemonUrl: string) => {
   const imageUrl = getImageUrl(pokemonData.sprites);
 
   return {
-    name: speciesData.names.find((name: PokemonName) => name.language.name === "ja")?.name || speciesData.name,
+    name:
+      speciesData.names.find((name: PokemonName) => name.language.name === "ja")?.name ||
+      speciesData.name,
     id: speciesData.id,
     imageUrl,
     sprites: pokemonData.sprites,
@@ -55,7 +57,9 @@ export const getPokemonList = async (limit = 20, page = 1) => {
   const offset = (page - 1) * limit;
   const data = await fetchData(`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`);
 
-  const pokemonList = await Promise.all(data.results.map((pokemon: Pokemon) => getPokemonWithImageUrl(pokemon.url)));
+  const pokemonList = await Promise.all(
+    data.results.map((pokemon: Pokemon) => getPokemonWithImageUrl(pokemon.url))
+  );
 
   return {
     pokemon: pokemonList,
@@ -75,7 +79,9 @@ export const getPokemonIdList = async () => {
   const data = await response.json();
 
   // URLからすべてのポケモンIDを抽出
-  const allIds = data.results.map((pokemon: Pokemon) => Number(pokemon.url.match(/\/(\d+)\/$/)?.[1]));
+  const allIds = data.results.map((pokemon: Pokemon) =>
+    Number(pokemon.url.match(/\/(\d+)\/$/)?.[1])
+  );
 
   return allIds;
 };
@@ -122,7 +128,10 @@ export const getPokemonDetailsInJapanese = async (id: number) => {
     }
 
     // typesとabilityのAPIリクエストを並行して実行
-    const [typesResponse, abilityResponse] = await Promise.all([fetch(data.types[0].type.url), fetch(data.abilities[0].ability.url)]);
+    const [typesResponse, abilityResponse] = await Promise.all([
+      fetch(data.types[0].type.url),
+      fetch(data.abilities[0].ability.url),
+    ]);
 
     if (!typesResponse.ok || !abilityResponse.ok) {
       throw new Error(`Failed to fetch additional details for Pokémon with id ${id}`);
@@ -131,23 +140,33 @@ export const getPokemonDetailsInJapanese = async (id: number) => {
     const abilityData = await abilityResponse.json();
 
     // 4. 日本語の情報を取得、失敗した場合は英語名を使用
-    const japaneseName = speciesData?.names?.find((name: PokemonName) => name.language.name === "ja")?.name || data.name; // speciesデータから日本語名があればそれを使用、なければ英語名
+    const japaneseName =
+      speciesData?.names?.find((name: PokemonName) => name.language.name === "ja")?.name ||
+      data.name; // speciesデータから日本語名があればそれを使用、なければ英語名
 
-    const japaneseGenus = speciesData?.genera?.find((name: PokemonGenus) => name.language.name === "ja")?.genus || "分類なし";
+    const japaneseGenus =
+      speciesData?.genera?.find((name: PokemonGenus) => name.language.name === "ja")?.genus ||
+      "分類なし";
 
     // タイプが複数ある場合を考慮して、すべてのタイプ名をマッピングし、コンマ区切りで結合
     const japaneseTypes = await Promise.all(
       data.types.map(async (typeInfo: PokemonType) => {
         const typeResponse = await fetch(typeInfo.type.url);
         const typeData = await typeResponse.json();
-        return typeData.names.find((name: PokemonName) => name.language.name === "ja")?.name || typeInfo.type.name;
+        return (
+          typeData.names.find((name: PokemonName) => name.language.name === "ja")?.name ||
+          typeInfo.type.name
+        );
       })
     ).then((types) => types.join("、 "));
 
-    const japaneseAbility = abilityData.names.find((name: PokemonName) => name.language.name === "ja")?.name || data.abilities[0].ability.name;
+    const japaneseAbility =
+      abilityData.names.find((name: PokemonName) => name.language.name === "ja")?.name ||
+      data.abilities[0].ability.name;
 
     const japaneseAbilityDescription =
-      abilityData.flavor_text_entries.find((entry: PokemonName) => entry.language.name === "ja")?.flavor_text || "説明なし";
+      abilityData.flavor_text_entries.find((entry: PokemonName) => entry.language.name === "ja")
+        ?.flavor_text || "説明なし";
 
     return {
       ...data,
@@ -169,13 +188,18 @@ export const searchPokemonByJapaneseName = async (query: string, page = 1) => {
   const totalPokemonCount = await getCount();
   const data = await fetchData(`https://pokeapi.co/api/v2/pokemon?limit=${totalPokemonCount}`);
 
-  const convertHiraganaToKatakana = (query: string) => query.replace(/[\u3041-\u3096]/g, (char) => String.fromCharCode(char.charCodeAt(0) + 0x60));
+  const convertHiraganaToKatakana = (query: string) =>
+    query.replace(/[\u3041-\u3096]/g, (char) => String.fromCharCode(char.charCodeAt(0) + 0x60));
 
   const katakanaQuery = convertHiraganaToKatakana(query);
 
-  const pokemonDetails = await Promise.all(data.results.map((pokemon: Pokemon) => getPokemonWithImageUrl(pokemon.url)));
+  const pokemonDetails = await Promise.all(
+    data.results.map((pokemon: Pokemon) => getPokemonWithImageUrl(pokemon.url))
+  );
 
-  const filteredPokemon = pokemonDetails.filter((pokemon) => pokemon && pokemon.name.includes(katakanaQuery));
+  const filteredPokemon = pokemonDetails.filter(
+    (pokemon) => pokemon && pokemon.name.includes(katakanaQuery)
+  );
 
   return {
     pokemon: filteredPokemon,

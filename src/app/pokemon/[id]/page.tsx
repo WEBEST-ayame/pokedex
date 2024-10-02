@@ -1,6 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
-import { findMaxPokemonId, findNextPokemonId, findPreviousPokemonId, getPokemonDetailsInJapanese } from "../../lib/pokeapi";
+import {
+  findMaxPokemonId,
+  findNextPokemonId,
+  findPreviousPokemonId,
+  getPokemonDetailsInJapanese,
+} from "../../lib/pokeapi";
 import style from "./page.module.css";
 import Image from "next/image";
 import Link from "next/link";
@@ -75,6 +80,7 @@ export default function PokemonDetail({ params }: { params: { id: string } }) {
               width={100}
               height={100}
               onLoadingComplete={handleImageLoad} // 画像読み込み完了時に呼ばれる（（なくてもいいけど、画像が描画されるまで何も表示されないのが気になる場合は実装）
+              onError={(e) => (e.currentTarget.src = "/image/no_image.jpg")}
             />
           </div>
           <div className={style.textContent}>
@@ -91,12 +97,18 @@ export default function PokemonDetail({ params }: { params: { id: string } }) {
             </p>
           </div>
           {pokemon.id !== 1 && (
-            <Link href={`/pokemon/${prevPokemonId}`} className={`${style.pageTransitionButton} ${style.prevButton}`}>
+            <Link
+              href={`/pokemon/${prevPokemonId}`}
+              className={`${style.pageTransitionButton} ${style.prevButton}`}
+            >
               <ArrowBackIcon />
             </Link>
           )}
           {Number(pokemon.id) !== maxPokemonId && (
-            <Link href={`/pokemon/${nextPokemonId}`} className={`${style.pageTransitionButton} ${style.nextButton}`}>
+            <Link
+              href={`/pokemon/${nextPokemonId}`}
+              className={`${style.pageTransitionButton} ${style.nextButton}`}
+            >
               <ArrowForwardIcon />
             </Link>
           )}

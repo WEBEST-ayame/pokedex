@@ -19,6 +19,7 @@ export default function Card({ data, isSearch }: CardProp) {
               alt={poke.name}
               width={100}
               height={100}
+              onError={(e) => (e.currentTarget.src = "/image/no_image.jpg")}
             />
             {isSearch && <div className={style.pokeName}>{poke.name}</div>}
           </Link>
