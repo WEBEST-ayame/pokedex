@@ -193,9 +193,21 @@ export const searchPokemonByJapaneseName = async (query: string, page = 1) => {
 
   const katakanaQuery = convertHiraganaToKatakana(query);
 
-  const pokemonDetails = await Promise.all(
-    data.results.map((pokemon: Pokemon) => getPokemonWithImageUrl(pokemon.url))
-  );
+  const batchSize = 10; // 1度に処理するリクエストの数
+  const pokemonDetails: Pokemon[] = [];
+
+  for (let i = 0; i < data.results.length; i += batchSize) {
+    const batch = data.results.slice(i, i + batchSize);
+    const batchResults = await Promise.all(
+      batch.map((pokemon: Pokemon) =>
+        getPokemonWithImageUrl(pokemon.url).catch((error) => {
+          console.error(`Failed to fetch details for ${pokemon.name}:`, error);
+          return null; // エラーが発生した場合はnullを返す
+        })
+      )
+    );
+    pokemonDetails.push(...batchResults.filter(Boolean));
+  }
 
   const filteredPokemon = pokemonDetails.filter(
     (pokemon) => pokemon && pokemon.name.includes(katakanaQuery)
